@@ -41,31 +41,35 @@
 
 					//todo: refactor
 					function init() {
-						var contactGroups = [];
-						$scope.dataSource.forEach(function (item) {
+
+						$scope.letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G',
+							'H', 'I', 'J', 'K', 'L', 'M', 'N',
+							'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+							'V', 'W', 'X', 'Y', 'Z'];
+
+						$scope.contactGroups = sortGroups(buildGroups($scope.dataSource));
+						$scope.curGroupName = $scope.contactGroups[0].name;
+					}
+
+					function buildGroups(dataSource) {
+						var target = [];
+						dataSource.forEach(function (item) {
 							var groupName = makePy(item.name)[0].toUpperCase()[0];
 							var hasGroup = false;
-							contactGroups.forEach(function (group) {
+							target.forEach(function (group) {
 								if (group.name === groupName) {
 									hasGroup = true;
 									group.children.push(item);
 								}
 							});
 							if (!hasGroup) {
-								contactGroups.push({
+								target.push({
 									name: groupName,
 									children: [item]
 								});
 							}
 						});
-
-						$scope.letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G',
-							'H', 'I', 'J', 'K', 'L', 'M', 'N',
-							'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-							'V', 'W', 'X', 'Y', 'Z'];
-						$scope.contactGroups = sortGroups(contactGroups);
-						contactGroups.length = 0;
-						$scope.curGroupName = $scope.contactGroups[0].name;
+						return target;
 					}
 
 					function getGroupByName(letter, groups) {
